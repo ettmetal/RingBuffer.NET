@@ -1,5 +1,5 @@
 #region License
-/* Copyright 2014 Joe Osborne
+/* Copyright 2015 Joe Osborne
  * 
  * This file is part of RingBuffer.
  *
