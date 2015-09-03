@@ -20,7 +20,12 @@ RingBuffer is a simple C# implementation of a ring (circular) buffer for C#. It 
 	}
 
 ### Including in a Project
-RingBuffer can be built as is to create a .dll which can be referenced by any other project. RingBuffer.cs can also be included in any project and will allow use of the RingBuffer<T> class.
+Releases on GitHub include a .dll including the RingBuffer functionality, which can be included as a build reference in any project.
+
+RingBuffer can also be built as is to create a .dll which can be referenced by any other project. RingBuffer.cs can also be included in any project and will allow use of the RingBuffer<T> class.
+
+### Requirements
+RingBuffer is built targeting the .NET framework V3.5. As such, the release .dll will only work in projects targeting at least .NET 3.5. The code should however work with .NET 2.0 onwards.
 
 ## Contributing
 All suggestions are welcome, in the form of pull requests or messages.
