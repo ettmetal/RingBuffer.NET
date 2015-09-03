@@ -18,13 +18,15 @@
  */
 #endregion
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace RingBuffer {
     /// <summary>
     /// A generic ring buffer. Grows when
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
-    public class RingBuffer<T> {
+    public class RingBuffer<T> : IEnumerable<T>, IEnumerable {
 
         private int head = 0;
         private int tail = 0;
@@ -93,6 +95,23 @@ namespace RingBuffer {
         /// <param name="startCapacity">The initial capacity of the buffer.</param>
         public RingBuffer(int startCapacity) {
             buffer = new T[startCapacity];
+        }
+
+        //==IEnumerable<T> Methods=============================================
+
+        public IEnumerator<T> GetEnumerator() {
+            int _index = head;
+            for(int i = 0; i < size; i++, _index = (_index + 1) % Capacity) {
+                yield return buffer[_index];
+            }
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+            return GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return (IEnumerator)GetEnumerator();
         }
     }
 }
