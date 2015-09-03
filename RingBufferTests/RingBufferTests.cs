@@ -73,6 +73,21 @@ namespace RingBufferTests {
             byte _tmp = buffer.Get();
         }
 
+        /// <summary>
+        /// Ensures that foreach iteration covers only the range of active
+        /// items
+        /// </summary>
+        [TestMethod()]
+        public void CanIterateForeach() {
+            RingBuffer<int> buffer = new RingBuffer<int>();
+            populateBuffer(iterations, buffer);
+            int _iterations = 0;
+            foreach(int i in buffer){
+                _iterations++;
+            }
+            Assert.AreEqual(iterations, _iterations, "Wrong number of foreach iterations.");
+        }
+
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
             for(int i = 0; i < elements; i++) {
                 buffer.Put(i);
