@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingBuffer", "RingBuffer\RingBuffer.csproj", "{6EBA1909-506C-4081-9A1D-A9882CE8D607}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingBufferTests", "RingBufferTests\RingBufferTests.csproj", "{AD944ED4-3ADE-471A-9F44-62DD4D47FC21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EBA1909-506C-4081-9A1D-A9882CE8D607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EBA1909-506C-4081-9A1D-A9882CE8D607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EBA1909-506C-4081-9A1D-A9882CE8D607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EBA1909-506C-4081-9A1D-A9882CE8D607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD944ED4-3ADE-471A-9F44-62DD4D47FC21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD944ED4-3ADE-471A-9F44-62DD4D47FC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD944ED4-3ADE-471A-9F44-62DD4D47FC21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD944ED4-3ADE-471A-9F44-62DD4D47FC21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
