@@ -125,6 +125,18 @@ namespace RingBufferTests {
 
         }
 
+        /// <summary>
+        /// Ensures that after calling Clear(), the RingBuffer contains no
+        /// items.
+        /// </summary>
+        [TestMethod()]
+        public void ClearAsExpected() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            _buffer.Clear();
+            Assert.AreEqual(0, _buffer.Count);
+        }
+
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
             for(int i = 0; i < elements; i++) {
                 buffer.Put(i);

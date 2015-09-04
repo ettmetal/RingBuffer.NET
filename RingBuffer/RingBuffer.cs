@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace RingBuffer {
     /// <summary>
-    /// A generic ring buffer. Grows when
+    /// A generic ring buffer. Grows when capacity is reached.
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
     public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection {
@@ -131,6 +131,18 @@ namespace RingBuffer {
                 if(comparer.Equals(item, element)) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Removes all items from the RingBuffer.
+        /// </summary>
+        public void Clear() {
+            for(int i = 0; i < Capacity; i++) {
+                buffer[i] = default(T);
+            }
+            head = 0;
+            tail = 0;
+            size = 0;
         }
         #endregion
     }
