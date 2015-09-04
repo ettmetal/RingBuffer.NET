@@ -37,7 +37,7 @@ namespace RingBufferTests {
             RingBuffer<int> _buffer = new RingBuffer<int>();
             for(int i = 0; i < iterations; i++) {
                 int _tmp = i;
-                _buffer.Put(_tmp);
+                _buffer.Add(_tmp);
                 Assert.AreEqual(i + 1, _buffer.Size, "Size is not equal to number of elements added.");
             }
         }
@@ -63,7 +63,7 @@ namespace RingBufferTests {
             int _startCapacity = 12;
             RingBuffer<double> _testBuffer = new RingBuffer<double>(_startCapacity);
             for(int i = 0; i < _startCapacity + 1; i++) {
-                _testBuffer.Put((double)i);
+                _testBuffer.Add((double)i);
             }
             Assert.AreEqual(_startCapacity * 2, _testBuffer.Capacity, "Capacity not expanded");
             Assert.AreEqual(_startCapacity + 1, _testBuffer.Size, "incorrect number of elements");
@@ -115,11 +115,11 @@ namespace RingBufferTests {
         [TestMethod()]
         public void ContainsReturnsCorrectly() {
             RingBuffer<int> _buffer = new RingBuffer<int>();
-            _buffer.Put(knownValue - 1);
+            _buffer.Add(knownValue - 1);
             bool _containsKnownValue = _buffer.Contains(knownValue);
             Assert.AreEqual(false, _containsKnownValue);
             populateBuffer(iterations, _buffer);
-            _buffer.Put(knownValue);
+            _buffer.Add(knownValue);
             _containsKnownValue = _buffer.Contains(knownValue);
             Assert.AreEqual(true, _containsKnownValue);
 
@@ -139,7 +139,7 @@ namespace RingBufferTests {
 
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
             for(int i = 0; i < elements; i++) {
-                buffer.Put(i);
+                buffer.Add(i);
             }
         }
     }

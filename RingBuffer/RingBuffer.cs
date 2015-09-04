@@ -59,8 +59,8 @@ namespace RingBuffer {
         /// <summary>
         /// Adds an item to the end of the buffer.
         /// </summary>
-        /// <param name="toAdd">The item to be added.</param>
-        public void Put(T toAdd) {
+        /// <param name="item">The item to be added.</param>
+        public void Add(T item) {
             if(tail == head && size != 0) {
                 T[] _newArray = new T[buffer.Length * 2];
                 for(int i = 0; i < Capacity; i++) {
@@ -68,10 +68,10 @@ namespace RingBuffer {
                 }
                 buffer = _newArray;
                 tail = (head + size) % Capacity;
-                addToBuffer(toAdd);
+                addToBuffer(item);
             }
             else {
-                addToBuffer(toAdd);
+                addToBuffer(item);
             }
         }
 
