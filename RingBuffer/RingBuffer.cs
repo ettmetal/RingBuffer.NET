@@ -26,7 +26,7 @@ namespace RingBuffer {
     /// A generic ring buffer. Grows when
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
-    public class RingBuffer<T> : IEnumerable<T>, IEnumerable {
+    public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection {
 
         private int head = 0;
         private int tail = 0;
@@ -44,7 +44,6 @@ namespace RingBuffer {
         /// </summary>
         public int Size { get { return size; } }
 
-        //==Buffer Access======================================================
         /// <summary>
         /// Retrieve the next item from the buffer.
         /// </summary>
@@ -83,7 +82,7 @@ namespace RingBuffer {
             size++;
         }
 
-        //==Constructors=======================================================
+        #region Contructors
         /// <summary>
         /// Creates a new RingBuffer with capacity of 4.
         /// </summary>
@@ -96,9 +95,9 @@ namespace RingBuffer {
         public RingBuffer(int startCapacity) {
             buffer = new T[startCapacity];
         }
+        #endregion
 
-        //==IEnumerable<T> Methods=============================================
-
+        #region IEnumerable Members
         public IEnumerator<T> GetEnumerator() {
             int _index = head;
             for(int i = 0; i < size; i++, _index = (_index + 1) % Capacity) {
@@ -113,5 +112,26 @@ namespace RingBuffer {
         IEnumerator IEnumerable.GetEnumerator() {
             return (IEnumerator)GetEnumerator();
         }
+        #endregion
+
+        #region ICollection Members
+        public int Count { get { return size; } }
+        public bool IsReadOnly { get { return false; } }
+        
+        /// <summary>
+        /// Determines whether the RingBuffer contains a specific value.
+        /// </summary>
+        /// <param name="item">The value to check the RingBuffer for.</param>
+        /// <returns>True if the RingBuffer contains <paramref name="item"/>
+        /// , false if it does not.
+        /// </returns>
+        public bool Contains(T item) {
+            EqualityComparer<T> comparer = EqualityComparer<T>.Default;
+            foreach(T element in buffer) {
+                if(comparer.Equals(item, element)) return true;
+            }
+            return false;
+        }
+        #endregion
     }
 }

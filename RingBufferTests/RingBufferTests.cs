@@ -27,6 +27,8 @@ namespace RingBufferTests {
 
         private int iterations = 1000;
 
+        private int knownValue = 1;
+
         /// <summary>
         /// Ensures that size is correctly augmented when items are added.
         /// </summary>
@@ -105,6 +107,22 @@ namespace RingBufferTests {
                 _iterations++;
             }
             Assert.AreEqual(iterations, _iterations, "Wrong number of foreach iterations.");
+        }
+
+        /// <summary>
+        /// Ensures that the contains function returns the correct value.
+        /// </summary>
+        [TestMethod()]
+        public void ContainsReturnsCorrectly() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            _buffer.Put(knownValue - 1);
+            bool _containsKnownValue = _buffer.Contains(knownValue);
+            Assert.AreEqual(false, _containsKnownValue);
+            populateBuffer(iterations, _buffer);
+            _buffer.Put(knownValue);
+            _containsKnownValue = _buffer.Contains(knownValue);
+            Assert.AreEqual(true, _containsKnownValue);
+
         }
 
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
