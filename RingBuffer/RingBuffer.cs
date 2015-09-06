@@ -60,7 +60,10 @@ namespace RingBuffer {
         /// Adds an item to the end of the buffer.
         /// </summary>
         /// <param name="item">The item to be added.</param>
-        public void Add(T item) {
+        public void Put(T item) {
+            // If tail & head are equal and the buffer is not empty, assume
+            // that it will overflow and expand the capacity before adding the
+            // item.
             if(tail == head && size != 0) {
                 T[] _newArray = new T[buffer.Length * 2];
                 for(int i = 0; i < Capacity; i++) {
@@ -70,6 +73,7 @@ namespace RingBuffer {
                 tail = (head + size) % Capacity;
                 addToBuffer(item);
             }
+            // If the buffer will not overflow, just add the item.
             else {
                 addToBuffer(item);
             }
@@ -117,6 +121,10 @@ namespace RingBuffer {
         #region ICollection Members
         public int Count { get { return size; } }
         public bool IsReadOnly { get { return false; } }
+
+        public void Add(T item) {
+            Put(item);
+        }
         
         /// <summary>
         /// Determines whether the RingBuffer contains a specific value.
@@ -143,6 +151,19 @@ namespace RingBuffer {
             head = 0;
             tail = 0;
             size = 0;
+        }
+
+        /// <summary>
+        /// Copies the contents of the RingBuffer to <paramref name="array"/>
+        /// starting at <paramref name="arrayIndex"/>.
+        /// </summary>
+        /// <param name="array">The array to be copied to.</param>
+        /// <param name="arrayIndex">The index of <paramref name="array"/>
+        /// where the buffer should begin copying to.</param>
+        public void CopyTo(T[] array, int arrayIndex) {
+            for(int i = head; i < size % Capacity; i = (i + 1) % Capacity, arrayIndex++) {
+                array[arrayIndex] = buffer[i];
+            }
         }
         #endregion
     }
