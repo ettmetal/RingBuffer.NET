@@ -165,6 +165,48 @@ namespace RingBuffer {
                 array[arrayIndex] = buffer[i];
             }
         }
+
+        /// <summary>
+        /// Removes <paramref name="item"/> from the buffer.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>True if <paramref name="item"/> was found and 
+        /// successfully removed. False if <paramref name="item"/> was not
+        /// found or there was a problem removing it from the RingBuffer.
+        /// </returns>
+        public bool Remove(T item) {
+            int _index = head;
+            int _removeIndex = 0;
+            bool _foundItem = false;
+            EqualityComparer<T> _comparer = EqualityComparer<T>.Default;
+            for(int i = 0; i < size; i++, _index = (_index + 1) % Capacity) {
+                if(_comparer.Equals(item, buffer[_index])) {
+                    _removeIndex = _index;
+                    _foundItem = true;
+                    break;
+                }
+            }
+            if(_foundItem) {
+                T[] _newBuffer = new T[size - 1];
+                _index = head;
+                bool _pastItem = false;
+                for(int i = 0; i < size - 1; i++, _index = (_index + 1) % Capacity) {
+                    if(_index == _removeIndex) {
+                        _pastItem = true;
+                    }
+                    if(_pastItem) {
+                        _newBuffer[_index] = buffer[(_index + 1) % Capacity];
+                    }
+                    else {
+                        _newBuffer[_index] = buffer[_index];
+                    }
+                }
+                size--;
+                buffer = _newBuffer;
+                return true;
+            }
+            return false;
+        }
         #endregion
     }
 }

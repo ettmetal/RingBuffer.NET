@@ -137,6 +137,36 @@ namespace RingBufferTests {
             Assert.AreEqual(0, _buffer.Count);
         }
 
+        /// <summary>
+        /// Ensures that CopyTo() behaves properly.
+        /// </summary>
+        [TestMethod()]
+        public void CopyToTest() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            int[] _array = new int[iterations + 1];
+            _buffer.CopyTo(_array, 1);
+            Assert.AreEqual(default(int), _array[0]);
+            for(int i = 1; i < _array.Length; i++) {
+                Assert.AreEqual(i - 1, _array[i]);
+            }
+        }
+
+        /// <summary>
+        /// Tests the Size and return value of Contains() after a Remove()
+        /// to ensure that the item was removed.
+        /// </summary>
+        [TestMethod()]
+        public void ItemIsRemoved() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            int _preRemoveSize = _buffer.Count;
+            _buffer.Remove(0);
+            Assert.AreEqual(false, _buffer.Contains(0));
+            Assert.AreEqual(_preRemoveSize - 1, _buffer.Count);
+
+        }
+
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
             for(int i = 0; i < elements; i++) {
                 buffer.Add(i);
