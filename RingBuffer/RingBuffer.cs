@@ -118,7 +118,7 @@ namespace RingBuffer {
         }
         #endregion
 
-        #region ICollection Members
+        #region ICollection<T> Members
         public int Count { get { return size; } }
         public bool IsReadOnly { get { return false; } }
 
@@ -206,6 +206,33 @@ namespace RingBuffer {
                 return true;
             }
             return false;
+        }
+        #endregion
+
+        #region ICollection Members
+        /// <summary>
+        /// Gets an object that can be used to synchronize access to the
+        /// RingBuffer.
+        /// </summary>
+        public Object SyncRoot { get { return this; } }
+
+        /// <summary>
+        /// Gets a value indicating whether access to the RingBuffer is 
+        /// synchronized (thread safe).
+        /// </summary>
+        public bool IsSynchronized { get { return false; } }
+
+        /// <summary>
+        /// Copies the elements of the RingBuffer to <paramref name="array"/>, 
+        /// starting at a particular Array <paramref name="index"/>.
+        /// </summary>
+        /// <param name="array">The one-dimensional Array that is the 
+        /// destination of the elements copied from RingBuffer. The Array must 
+        /// have zero-based indexing.</param>
+        /// <param name="index">The zero-based index in 
+        /// <paramref name="array"/> at which copying begins.</param>
+        void ICollection.CopyTo(Array array, int index) {
+            CopyTo((T[])array, index);
         }
         #endregion
     }
