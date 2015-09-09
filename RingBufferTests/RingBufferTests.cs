@@ -27,6 +27,8 @@ namespace RingBufferTests {
 
         private int iterations = 1000;
 
+        private int knownValue = 1;
+
         /// <summary>
         /// Ensures that size is correctly augmented when items are added.
         /// </summary>
@@ -35,7 +37,7 @@ namespace RingBufferTests {
             RingBuffer<int> _buffer = new RingBuffer<int>();
             for(int i = 0; i < iterations; i++) {
                 int _tmp = i;
-                _buffer.Put(_tmp);
+                _buffer.Add(_tmp);
                 Assert.AreEqual(i + 1, _buffer.Size, "Size is not equal to number of elements added.");
             }
         }
@@ -61,7 +63,7 @@ namespace RingBufferTests {
             int _startCapacity = 12;
             RingBuffer<double> _testBuffer = new RingBuffer<double>(_startCapacity);
             for(int i = 0; i < _startCapacity + 1; i++) {
-                _testBuffer.Put((double)i);
+                _testBuffer.Add((double)i);
             }
             Assert.AreEqual(_startCapacity * 2, _testBuffer.Capacity, "Capacity not expanded");
             Assert.AreEqual(_startCapacity + 1, _testBuffer.Size, "incorrect number of elements");
@@ -107,9 +109,67 @@ namespace RingBufferTests {
             Assert.AreEqual(iterations, _iterations, "Wrong number of foreach iterations.");
         }
 
+        /// <summary>
+        /// Ensures that the contains function returns the correct value.
+        /// </summary>
+        [TestMethod()]
+        public void ContainsReturnsCorrectly() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            _buffer.Add(knownValue - 1);
+            bool _containsKnownValue = _buffer.Contains(knownValue);
+            Assert.AreEqual(false, _containsKnownValue);
+            populateBuffer(iterations, _buffer);
+            _buffer.Add(knownValue);
+            _containsKnownValue = _buffer.Contains(knownValue);
+            Assert.AreEqual(true, _containsKnownValue);
+
+        }
+
+        /// <summary>
+        /// Ensures that after calling Clear(), the RingBuffer contains no
+        /// items.
+        /// </summary>
+        [TestMethod()]
+        public void ClearAsExpected() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            _buffer.Clear();
+            Assert.AreEqual(0, _buffer.Count);
+        }
+
+        /// <summary>
+        /// Ensures that CopyTo() behaves properly.
+        /// </summary>
+        [TestMethod()]
+        public void CopyToTest() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            int[] _array = new int[iterations + 1];
+            _buffer.CopyTo(_array, 1);
+            Assert.AreEqual(default(int), _array[0]);
+            for(int i = 1; i < _array.Length; i++) {
+                Assert.AreEqual(i - 1, _array[i]);
+            }
+        }
+
+        /// <summary>
+        /// Tests the Size and return value of Contains() after a Remove()
+        /// to ensure that the item was removed.
+        /// </summary>
+        [TestMethod()]
+        public void ItemIsRemoved() {
+            RingBuffer<int> _buffer = new RingBuffer<int>();
+            populateBuffer(iterations, _buffer);
+            int _preRemoveSize = _buffer.Count;
+            _buffer.Remove(0);
+            Assert.AreEqual(false, _buffer.Contains(0));
+            Assert.AreEqual(_preRemoveSize - 1, _buffer.Count);
+
+        }
+
         private void populateBuffer(int elements, RingBuffer<int> buffer) {
             for(int i = 0; i < elements; i++) {
-                buffer.Put(i);
+                buffer.Add(i);
             }
         }
     }
