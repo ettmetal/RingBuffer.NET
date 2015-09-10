@@ -155,8 +155,10 @@ namespace RingBuffer {
         /// <param name="arrayIndex">The index of <paramref name="array"/>
         /// where the buffer should begin copying to.</param>
         public void CopyTo(T[] array, int arrayIndex) {
-            for(int i = head; i < size % Capacity; i = (i + 1) % Capacity, arrayIndex++) {
-                array[arrayIndex] = buffer[i];
+            int _index = head;
+            for(int i = 0; i < size; i++, arrayIndex++, _index = (_index + 1) %
+                Capacity) {
+                array[arrayIndex] = buffer[_index];
             }
         }
 
