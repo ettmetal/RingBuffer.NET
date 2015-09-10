@@ -23,16 +23,16 @@ using System.Collections.Generic;
 
 namespace RingBuffer {
     /// <summary>
-    /// A generic ring buffer. Grows when capacity is reached.
+    /// A generic ring buffer with fixed capacity.
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
     public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection {
 
-        private int head = 0;
-        private int tail = 0;
-        private int size = 0;
+        protected int head = 0;
+        protected int tail = 0;
+        protected int size = 0;
 
-        private T[] buffer;
+        protected T[] buffer;
 
         /// <summary>
         /// The total number of elements the buffer can store (grows).
@@ -62,16 +62,9 @@ namespace RingBuffer {
         /// <param name="item">The item to be added.</param>
         public void Put(T item) {
             // If tail & head are equal and the buffer is not empty, assume
-            // that it will overflow and expand the capacity before adding the
-            // item.
+            // that it will overflow and throw an exception.
             if(tail == head && size != 0) {
-                T[] _newArray = new T[buffer.Length * 2];
-                for(int i = 0; i < Capacity; i++) {
-                    _newArray[i] = buffer[i];
-                }
-                buffer = _newArray;
-                tail = (head + size) % Capacity;
-                addToBuffer(item);
+                throw new System.InvalidOperationException("The RingBuffer is full");
             }
             // If the buffer will not overflow, just add the item.
             else {
@@ -80,13 +73,13 @@ namespace RingBuffer {
         }
 
         // So we can be DRY
-        private void addToBuffer(T toAdd) {
+        protected void addToBuffer(T toAdd) {
             buffer[tail] = toAdd;
             tail = (tail + 1) % Capacity;
             size++;
         }
 
-        #region Contructors
+        #region Constructors
         /// <summary>
         /// Creates a new RingBuffer with capacity of 4.
         /// </summary>
@@ -95,7 +88,7 @@ namespace RingBuffer {
         /// <summary>
         /// Creates a new RingBuffer.
         /// </summary>
-        /// <param name="startCapacity">The initial capacity of the buffer.</param>
+        /// <param name="startCapacity">The capacity of the buffer.</param>
         public RingBuffer(int startCapacity) {
             buffer = new T[startCapacity];
         }
