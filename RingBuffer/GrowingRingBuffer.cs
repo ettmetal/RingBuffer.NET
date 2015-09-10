@@ -45,11 +45,11 @@ namespace RingBuffer {
                 }
                 buffer = _newArray;
                 tail = (head + size) % Capacity;
-                addToBuffer(item);
+                addToBuffer(item, false);
             }
             // If the buffer would not overflow, just add the item.
             else {
-                addToBuffer(item);
+                addToBuffer(item, false);
             }
         }
 

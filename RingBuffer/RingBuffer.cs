@@ -34,6 +34,8 @@ namespace RingBuffer {
 
         protected T[] buffer;
 
+        private bool allowOverflow;
+
         /// <summary>
         /// The total number of elements the buffer can store (grows).
         /// </summary>
@@ -64,19 +66,29 @@ namespace RingBuffer {
             // If tail & head are equal and the buffer is not empty, assume
             // that it will overflow and throw an exception.
             if(tail == head && size != 0) {
-                throw new System.InvalidOperationException("The RingBuffer is full");
+                if(allowOverflow) {
+                    addToBuffer(item, true);
+                }
+                else {
+                    throw new System.InvalidOperationException("The RingBuffer is full");
+                }
             }
             // If the buffer will not overflow, just add the item.
             else {
-                addToBuffer(item);
+                addToBuffer(item, false);
             }
         }
 
         // So we can be DRY
-        protected void addToBuffer(T toAdd) {
+        protected void addToBuffer(T toAdd, bool overflow) {
+            if(overflow) {
+                head = (head + 1) % Capacity;
+            }
+            else {
+                size++;
+            }
             buffer[tail] = toAdd;
             tail = (tail + 1) % Capacity;
-            size++;
         }
 
         #region Constructors
@@ -86,11 +98,22 @@ namespace RingBuffer {
         public RingBuffer() : this(4) { }
 
         /// <summary>
-        /// Creates a new RingBuffer.
+        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity,
+        /// which cannot overflow.
         /// </summary>
         /// <param name="capacity">The capacity of the buffer.</param>
-        public RingBuffer(int capacity) {
+        public RingBuffer(int capacity) : this(capacity, false) { }
+
+        /// <summary>
+        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity
+        /// and the ability to overflow based on <paramref name="overflow"/>.
+        /// </summary>
+        /// <param name="capacity">The capacity of the buffer.</param>
+        /// <param name="overflow">whether the RingBuffer should allow overflow
+        /// </param>
+        public RingBuffer(int capacity, bool overflow) {
             buffer = new T[capacity];
+            allowOverflow = overflow;
         }
         #endregion
 
