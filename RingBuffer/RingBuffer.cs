@@ -88,9 +88,9 @@ namespace RingBuffer {
         /// <summary>
         /// Creates a new RingBuffer.
         /// </summary>
-        /// <param name="startCapacity">The capacity of the buffer.</param>
-        public RingBuffer(int startCapacity) {
-            buffer = new T[startCapacity];
+        /// <param name="capacity">The capacity of the buffer.</param>
+        public RingBuffer(int capacity) {
+            buffer = new T[capacity];
         }
         #endregion
 
