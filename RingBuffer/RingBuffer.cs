@@ -135,8 +135,9 @@ namespace RingBuffer {
         /// </returns>
         public bool Contains(T item) {
             EqualityComparer<T> comparer = EqualityComparer<T>.Default;
-            foreach(T element in buffer) {
-                if(comparer.Equals(item, element)) return true;
+            int _index = head;
+            for(int i = 0; i < size; i++, _index = (_index + 1) % Capacity) {
+                if(comparer.Equals(item, buffer[_index])) return true;
             }
             return false;
         }
