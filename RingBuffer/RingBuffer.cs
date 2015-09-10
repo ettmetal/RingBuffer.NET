@@ -23,16 +23,18 @@ using System.Collections.Generic;
 
 namespace RingBuffer {
     /// <summary>
-    /// A generic ring buffer. Grows when capacity is reached.
+    /// A generic ring buffer with fixed capacity.
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
     public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection {
 
-        private int head = 0;
-        private int tail = 0;
-        private int size = 0;
+        protected int head = 0;
+        protected int tail = 0;
+        protected int size = 0;
 
-        private T[] buffer;
+        protected T[] buffer;
+
+        private bool allowOverflow;
 
         /// <summary>
         /// The total number of elements the buffer can store (grows).
@@ -62,42 +64,56 @@ namespace RingBuffer {
         /// <param name="item">The item to be added.</param>
         public void Put(T item) {
             // If tail & head are equal and the buffer is not empty, assume
-            // that it will overflow and expand the capacity before adding the
-            // item.
+            // that it will overflow and throw an exception.
             if(tail == head && size != 0) {
-                T[] _newArray = new T[buffer.Length * 2];
-                for(int i = 0; i < Capacity; i++) {
-                    _newArray[i] = buffer[i];
+                if(allowOverflow) {
+                    addToBuffer(item, true);
                 }
-                buffer = _newArray;
-                tail = (head + size) % Capacity;
-                addToBuffer(item);
+                else {
+                    throw new System.InvalidOperationException("The RingBuffer is full");
+                }
             }
             // If the buffer will not overflow, just add the item.
             else {
-                addToBuffer(item);
+                addToBuffer(item, false);
             }
         }
 
         // So we can be DRY
-        private void addToBuffer(T toAdd) {
+        protected void addToBuffer(T toAdd, bool overflow) {
+            if(overflow) {
+                head = (head + 1) % Capacity;
+            }
+            else {
+                size++;
+            }
             buffer[tail] = toAdd;
             tail = (tail + 1) % Capacity;
-            size++;
         }
 
-        #region Contructors
+        #region Constructors
         /// <summary>
         /// Creates a new RingBuffer with capacity of 4.
         /// </summary>
         public RingBuffer() : this(4) { }
 
         /// <summary>
-        /// Creates a new RingBuffer.
+        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity,
+        /// which cannot overflow.
         /// </summary>
-        /// <param name="startCapacity">The initial capacity of the buffer.</param>
-        public RingBuffer(int startCapacity) {
-            buffer = new T[startCapacity];
+        /// <param name="capacity">The capacity of the buffer.</param>
+        public RingBuffer(int capacity) : this(capacity, false) { }
+
+        /// <summary>
+        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity
+        /// and the ability to overflow based on <paramref name="overflow"/>.
+        /// </summary>
+        /// <param name="capacity">The capacity of the buffer.</param>
+        /// <param name="overflow">whether the RingBuffer should allow overflow
+        /// </param>
+        public RingBuffer(int capacity, bool overflow) {
+            buffer = new T[capacity];
+            allowOverflow = overflow;
         }
         #endregion
 
@@ -162,8 +178,10 @@ namespace RingBuffer {
         /// <param name="arrayIndex">The index of <paramref name="array"/>
         /// where the buffer should begin copying to.</param>
         public void CopyTo(T[] array, int arrayIndex) {
-            for(int i = head; i < size % Capacity; i = (i + 1) % Capacity, arrayIndex++) {
-                array[arrayIndex] = buffer[i];
+            int _index = head;
+            for(int i = 0; i < size; i++, arrayIndex++, _index = (_index + 1) %
+                Capacity) {
+                array[arrayIndex] = buffer[_index];
             }
         }
 

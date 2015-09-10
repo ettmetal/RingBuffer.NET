@@ -34,7 +34,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void PutIncrementsSize() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             for(int i = 0; i < iterations; i++) {
                 int _tmp = i;
                 _buffer.Add(_tmp);
@@ -47,7 +47,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void GetDecrementsSize() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, _buffer);
             for(int i = iterations; i > 0; i--) {
                 int _tmp = _buffer.Get();
@@ -58,7 +58,7 @@ namespace RingBufferTests {
         /// <summary>
         /// Ensures that capacity expands as needed
         /// </summary>
-        [TestMethod()]
+        /*[TestMethod()]
         public void CapacityExpands() {
             int _startCapacity = 12;
             RingBuffer<double> _testBuffer = new RingBuffer<double>(_startCapacity);
@@ -67,7 +67,7 @@ namespace RingBufferTests {
             }
             Assert.AreEqual(_startCapacity * 2, _testBuffer.Capacity, "Capacity not expanded");
             Assert.AreEqual(_startCapacity + 1, _testBuffer.Size, "incorrect number of elements");
-        }
+        }*/
 
         /// <summary>
         /// Ensures that head/tail move properly by testing the value of data
@@ -75,10 +75,9 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void RetrievedInCorrectOrder() {
-            int _iterations = 10;
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, _buffer);
-            for(int i = 0; i < _iterations; i++) {
+            for(int i = 0; i < iterations; i++) {
                 int _tmp = _buffer.Get();
                 Assert.AreEqual(i, _tmp, "Incorrect Sequence");
             }
@@ -100,7 +99,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void CanIterateForeach() {
-            RingBuffer<int> buffer = new RingBuffer<int>();
+            RingBuffer<int> buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, buffer);
             int _iterations = 0;
             foreach(int i in buffer){
@@ -114,7 +113,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void ContainsReturnsCorrectly() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations + 2);
             _buffer.Add(knownValue - 1);
             bool _containsKnownValue = _buffer.Contains(knownValue);
             Assert.AreEqual(false, _containsKnownValue);
@@ -131,7 +130,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void ClearAsExpected() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, _buffer);
             _buffer.Clear();
             Assert.AreEqual(0, _buffer.Count);
@@ -142,7 +141,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void CopyToTest() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, _buffer);
             int[] _array = new int[iterations + 1];
             _buffer.CopyTo(_array, 1);
@@ -158,7 +157,7 @@ namespace RingBufferTests {
         /// </summary>
         [TestMethod()]
         public void ItemIsRemoved() {
-            RingBuffer<int> _buffer = new RingBuffer<int>();
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
             populateBuffer(iterations, _buffer);
             int _preRemoveSize = _buffer.Count;
             _buffer.Remove(0);
