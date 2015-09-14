@@ -54,15 +54,9 @@ namespace RingBuffer {
         }
 
         #region Constructors
-        /// <summary>
-        /// Creates a new GrowingRingBuffer with capacity of 4.
-        /// </summary>
+        // Default capacity is 4.
         public GrowingRingBuffer() : this(4) { }
-
-        /// <summary>
-        /// Creates a new GrowingRingBuffer.
-        /// </summary>
-        /// <param name="startCapacity">The initial capacity of the buffer.</param>
+        // Capture the starting capacity, for future expansion.
         public GrowingRingBuffer(int startCapacity)
             : base(startCapacity) {
             originalCapacity = startCapacity;

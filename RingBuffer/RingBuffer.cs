@@ -26,7 +26,8 @@ namespace RingBuffer {
     /// A generic ring buffer with fixed capacity.
     /// </summary>
     /// <typeparam name="T">The type of data stored in the buffer</typeparam>
-    public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection {
+    public class RingBuffer<T> : IEnumerable<T>, IEnumerable, ICollection<T>, 
+        ICollection {
 
         protected int head = 0;
         protected int tail = 0;
@@ -35,6 +36,7 @@ namespace RingBuffer {
         protected T[] buffer;
 
         private bool allowOverflow;
+        public bool AllowOverflow { get { return allowOverflow; } }
 
         /// <summary>
         /// The total number of elements the buffer can store (grows).
@@ -79,7 +81,6 @@ namespace RingBuffer {
             }
         }
 
-        // So we can be DRY
         protected void addToBuffer(T toAdd, bool overflow) {
             if(overflow) {
                 head = (head + 1) % Capacity;
@@ -92,25 +93,11 @@ namespace RingBuffer {
         }
 
         #region Constructors
-        /// <summary>
-        /// Creates a new RingBuffer with capacity of 4.
-        /// </summary>
+        // Default capacity is 4, default overflow behavior is false.
         public RingBuffer() : this(4) { }
 
-        /// <summary>
-        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity,
-        /// which cannot overflow.
-        /// </summary>
-        /// <param name="capacity">The capacity of the buffer.</param>
         public RingBuffer(int capacity) : this(capacity, false) { }
 
-        /// <summary>
-        /// Creates a new RingBuffer with <paramref name="capacity"/> capacity
-        /// and the ability to overflow based on <paramref name="overflow"/>.
-        /// </summary>
-        /// <param name="capacity">The capacity of the buffer.</param>
-        /// <param name="overflow">whether the RingBuffer should allow overflow
-        /// </param>
         public RingBuffer(int capacity, bool overflow) {
             buffer = new T[capacity];
             allowOverflow = overflow;
