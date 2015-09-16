@@ -104,7 +104,7 @@ namespace RingBuffer {
         }
         #endregion
 
-        #region IEnumerable Members
+        #region IEnumerable/IEnumerable<T> Members
         public IEnumerator<T> GetEnumerator() {
             int _index = head;
             for(int i = 0; i < size; i++, _index = (_index + 1) % Capacity) {
