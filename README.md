@@ -1,5 +1,5 @@
 # RingBuffer
-By [Joe Osborne](www.joeo.rocks)
+By [Joe Osborne](www.joes.games)
 
 ## Description
 RingBuffer is a simple C# implementation of a ring (circular) buffer for C#. It is generic, and implements the .Net IEnumerable and IEnumerable<T> interfaces.
