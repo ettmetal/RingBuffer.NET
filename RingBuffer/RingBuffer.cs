@@ -47,6 +47,20 @@ namespace RingBuffer {
         /// The number of elements currently contained in the buffer.
         /// </summary>
         public int Size { get { return size; } }
+        
+        public T this[int index]
+        {
+            get
+            {
+                if (index >= size || index < 0) throw new IndexOutOfRangeException();
+                return buffer[(head + index) % Capacity];
+            }
+            set
+            {
+                if (index >= size || index < 0) throw new IndexOutOfRangeException();
+                buffer[(head + index) % Capacity] = value;
+            }
+        }
 
         /// <summary>
         /// Retrieve the next item from the buffer.

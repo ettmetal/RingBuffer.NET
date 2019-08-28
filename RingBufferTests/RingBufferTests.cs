@@ -70,6 +70,42 @@ namespace RingBufferTests {
         }*/
 
         /// <summary>
+        /// Ensures that indexing works properly.
+        /// </summary>
+        [TestMethod()]
+        public void Indexing() {
+            RingBuffer<int> _buffer = new RingBuffer<int>(iterations);
+            for (int i = 0; i < iterations; i++) {
+                _buffer.Add(i);
+            }
+            for (int i = 0; i < iterations; i++) {
+                Assert.AreEqual(i, _buffer[i], "Indexing did not return expected value.");
+            }
+        }
+
+        /// <summary>
+        /// Ensures that an exception is thrown when retrieving item
+        /// by index and index is smaller than 0.
+        /// than size.
+        /// </summary>
+        [TestMethod(), ExpectedException(typeof(IndexOutOfRangeException))]
+        public void ThrowsError_IndexingLowerEnd() {
+            RingBuffer<byte> buffer = new RingBuffer<byte>();
+            byte _tmp = buffer[-1];
+        }
+
+        /// <summary>
+        /// Ensures that an exception is thrown when retrieving item
+        /// by index and index is greater-than or equal to size.
+        /// than size.
+        /// </summary>
+        [TestMethod(), ExpectedException(typeof(IndexOutOfRangeException))]
+        public void ThrowsError_IndexingUpperEnd() {
+            RingBuffer<byte> buffer = new RingBuffer<byte>();
+            byte _tmp = buffer[0];
+        }
+
+        /// <summary>
         /// Ensures that head/tail move properly by testing the value of data
         /// returned by get.
         /// </summary>
